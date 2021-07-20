@@ -80,12 +80,12 @@ class Avatar extends StatelessWidget {
   static const _smallColoredCircle = _smallPaddedCircle * 2 + 4;
 
   // Medium avatar configuration
-  static const _mediumAvatarSize = 70.0;
+  static const _mediumAvatarSize = 90.0;
   static const _mediumPaddedCircle = _mediumAvatarSize + 2;
   static const _mediumColoredCircle = _mediumPaddedCircle * 2 + 4;
 
   // Big avatar configuration
-  static const _bigAvatarSize = 100.0;
+  static const _bigAvatarSize = 150.0;
   static const _bigPaddedCircle = _bigAvatarSize + 2;
   static const _bigColoredCircle = _bigPaddedCircle * 2 + 4;
 

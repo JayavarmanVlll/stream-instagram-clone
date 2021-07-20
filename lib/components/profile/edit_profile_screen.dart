@@ -62,7 +62,7 @@ class EditProfileScreen extends StatelessWidget {
           SizedBox(
             height: 200,
             child: Center(
-              child: Avatar.medium(userData: userData),
+              child: Avatar.big(userData: userData),
             ),
           ),
           const _ChangeProfilePictureButton(),
@@ -93,12 +93,12 @@ class EditProfileScreen extends StatelessWidget {
                 const SizedBox(
                   width: 100,
                   child: Text(
-                    'user',
+                    'Username',
                     style: AppTextStyle.textStyleBold,
                   ),
                 ),
                 Text(
-                  '${userData.fullName} ',
+                  '${context.read<FeedState>().user.id} ',
                   style: AppTextStyle.textStyleBold,
                 ),
               ],

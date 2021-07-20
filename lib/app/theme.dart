@@ -9,7 +9,7 @@ abstract class AppColors {
   static const primaryTextColor = Colors.white;
 
   /// Accent Color.
-  static const accentColor = Colors.blue;
+  static const accentColor = Color(0xFF0094F5);
 
   /// Color to use for favorite icons (indicating a like).
   static const likeColor = Colors.red;
@@ -51,6 +51,30 @@ abstract class AppTheme {
     visualDensity: VisualDensity.adaptivePlatformDensity,
     backgroundColor: AppColors.backgroundColor,
     scaffoldBackgroundColor: AppColors.backgroundColor,
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(
+          AppColors.accentColor,
+        ),
+        foregroundColor: MaterialStateProperty.all<Color>(
+          AppColors.primaryTextColor,
+        ),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: MaterialStateProperty.all<Color>(
+          AppColors.accentColor,
+        ),
+        textStyle: MaterialStateProperty.all<TextStyle>(
+          const TextStyle(
+            color: AppColors.accentColor,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    ),
     brightness: Brightness.dark,
     accentColor: AppColors.accentColor,
   );
