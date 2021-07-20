@@ -430,10 +430,12 @@ packages:
   stream_feed:
     dependency: "direct main"
     description:
-      name: stream_feed
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "0.2.2"
+      path: "packages/stream_feed"
+      ref: core-docs
+      resolved-ref: "5a021b8a421c3c1ddb06037caa90528eacfcbcd7"
+      url: "https://github.com/GetStream/stream-feed-flutter"
+    source: git
+    version: "0.2.1"
   string_scanner:
     dependency: transitive
     description:

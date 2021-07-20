@@ -98,7 +98,7 @@ class EditProfileScreen extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '${context.read<FeedState>().user.id} ',
+                  '${context.feedState.user.id} ',
                   style: AppTextStyle.textStyleBold,
                 ),
               ],
@@ -128,7 +128,7 @@ class __ChangeProfilePictureButtonState
   Future<void> _changePicture() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
-      await context.read<FeedState>().updateProfilePhoto(pickedFile.path);
+      await context.feedState.updateProfilePhoto(pickedFile.path);
     } else {
       context.removeAndShowSnackbar('No picture selected');
     }

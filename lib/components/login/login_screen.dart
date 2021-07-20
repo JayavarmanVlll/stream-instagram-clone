@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../app/app.dart';
 import '../home/home.dart';
@@ -55,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () async {
                       context.removeAndShowSnackbar('Loading User');
 
-                      await context.read<FeedState>().connect(user);
+                      await context.feedState.connect(user);
 
                       context.removeAndShowSnackbar('User Loaded');
 

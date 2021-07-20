@@ -24,9 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
   late feed.User user;
 
   Future<List<feed.Activity>> _fetchActivities() async {
-    final client = context.read<FeedState>().client;
-    final userFeed = client.flatFeed('user', client.currentUser!.userId);
-    return userFeed.getActivities();
+    return context.feedState.currentUserFeed.getActivities();
   }
 
   @override
@@ -66,6 +64,10 @@ class _ProfilePageState extends State<ProfilePage> {
                       child: const Text('Edit Profile'),
                     ),
                   ),
+                  const SliverToBoxAdapter(
+                      child: SizedBox(
+                    height: 24,
+                  )),
                   SliverGrid(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -81,7 +83,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           width: 200,
                           height: 200,
                           child: Image(
-                            fit: BoxFit.contain,
+                            fit: BoxFit.cover,
                             image: NetworkImage(
                               Helpers.resizedUrl(
                                 url: url,
@@ -116,7 +118,7 @@ class _ProfileHeader extends StatefulWidget {
 
 class __ProfileHeaderState extends State<_ProfileHeader> {
   late final Future<feed.User>? userFuture =
-      context.read<FeedState>().client.currentUser?.profile();
+      context.feedState.client.currentUser?.profile();
 
   @override
   Widget build(BuildContext context) {

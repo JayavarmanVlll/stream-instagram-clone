@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:stream_feed/stream_feed.dart' as feed;
 
 import '../../app/app.dart';
 
@@ -20,6 +21,7 @@ class Avatar extends StatelessWidget {
         _coloredCircle = _tinyColoredCircle,
         hasNewStory = false,
         fontSize = 14,
+        resize = const feed.Resize(80, 80),
         super(key: key);
 
   /// Creates a small avatar.
@@ -31,6 +33,7 @@ class Avatar extends StatelessWidget {
         _paddedCircle = _smallPaddedCircle,
         _coloredCircle = _smallColoredCircle,
         fontSize = 20,
+        resize = const feed.Resize(80, 80),
         super(key: key);
 
   /// Creates a medium avatar.
@@ -42,6 +45,7 @@ class Avatar extends StatelessWidget {
         _paddedCircle = _mediumPaddedCircle,
         _coloredCircle = _mediumColoredCircle,
         fontSize = 26,
+        resize = const feed.Resize(300, 300),
         super(key: key);
 
   /// Creates a big avatar.
@@ -53,6 +57,7 @@ class Avatar extends StatelessWidget {
         _paddedCircle = _bigPaddedCircle,
         _coloredCircle = _bigColoredCircle,
         fontSize = 30,
+        resize = const feed.Resize(300, 300),
         super(key: key);
 
   /// Indicates if the user has a new story. If yes, their avatar is surrounded
@@ -64,6 +69,9 @@ class Avatar extends StatelessWidget {
 
   /// Text size of the user's initials when there is no profile photo.
   final double fontSize;
+
+  /// Profile picture Size,
+  final feed.Resize resize;
 
   final double _avatarSize;
   final double _paddedCircle;
@@ -96,6 +104,7 @@ class Avatar extends StatelessWidget {
         size: _avatarSize,
         userData: userData,
         fontSize: fontSize,
+        resize: resize,
       );
     }
     return Container(
@@ -110,6 +119,7 @@ class Avatar extends StatelessWidget {
           size: _avatarSize,
           userData: userData,
           fontSize: fontSize,
+          resize: resize,
         ),
       ),
     );
@@ -122,12 +132,15 @@ class _CircularProfilePicture extends StatelessWidget {
     required this.size,
     required this.userData,
     required this.fontSize,
+    required this.resize,
   }) : super(key: key);
 
   final UserData userData;
 
   final double size;
   final double fontSize;
+
+  final feed.Resize resize;
 
   @override
   Widget build(BuildContext context) {
@@ -148,7 +161,7 @@ class _CircularProfilePicture extends StatelessWidget {
             ),
           )
         : CachedNetworkImage(
-            imageUrl: profilePhoto,
+            imageUrl: Helpers.resizedUrl(url: profilePhoto, resize: resize),
             fit: BoxFit.contain,
             imageBuilder: (context, imageProvider) => Container(
               width: size,

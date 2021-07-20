@@ -19,21 +19,7 @@ class _TimelinePageState extends State<TimelinePage> {
   late final _activitiesFuture = _loadActivities();
 
   Future<List<feed.EnrichedActivity>> _loadActivities() async {
-    final timelineFeed = context.read<FeedState>().client.flatFeed(
-          'timeline',
-          context.read<FeedState>().user.id,
-        );
-
-    // final test = await context.read<FeedState>().client.aggregatedFeed(
-    //       'timeline',
-    //       context.read<FeedState>().user.id,
-    //     );
-
-    // timelineFeed.getEnrichedActivities();
-
-    // final tester = test.getActivityDetail(activityId)
-
-    return timelineFeed.getEnrichedActivities(
+    return context.feedState.currentTimelineFeed.getEnrichedActivities(
       flags: feed.EnrichmentFlags()
           .withOwnReactions()
           .withRecentReactions()

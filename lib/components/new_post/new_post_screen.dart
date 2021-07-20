@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:stream_feed/stream_feed.dart' as feed;
 import 'package:transparent_image/transparent_image.dart';
 
@@ -39,7 +38,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
   }
 
   Future<void> _postImage() async {
-    final client = context.read<FeedState>().client;
     if (_pickedFile == null) {
       context.removeAndShowSnackbar('Please select an image first');
       return;
@@ -50,6 +48,8 @@ class _NewPostScreenState extends State<NewPostScreen> {
       return;
     }
     _setLoading(true);
+
+    final client = context.feedState.client;
 
     final imageUrl = await client.images
         .upload(feed.AttachmentFile(path: _pickedFile!.path));
@@ -63,9 +63,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
         time: DateTime.now(),
       );
 
-      final userFeed = client.flatFeed('user', client.currentUser!.userId);
-
-      await userFeed.addActivity(activity);
+      await context.feedState.currentUserFeed.addActivity(activity);
     }
 
     _setLoading(false, shouldCallSetState: false);

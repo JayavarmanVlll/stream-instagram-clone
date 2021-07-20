@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:stream_feed/stream_feed.dart' as feed;
+import 'package:provider/provider.dart';
+
+import 'state/feed_state.dart';
 
 /// Extension method on [BuildContext] to easily perform snackbar operations.
 extension Snackbar on BuildContext {
@@ -14,6 +17,12 @@ extension Snackbar on BuildContext {
       ),
     );
   }
+}
+
+/// Extension method on [BuildContext] to easily retrieve providers.
+extension ProviderX on BuildContext {
+  /// Returns the application [FeedState].
+  FeedState get feedState => read<FeedState>();
 }
 
 /// Convenient helper methods.

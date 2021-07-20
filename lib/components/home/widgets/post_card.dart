@@ -64,15 +64,15 @@ class __PictureCarousalState extends State<_PictureCarousal> {
   }
 
   int? getLikeCount() {
-    return widget.enrichedAcitivity.reactionCounts!['like'] as int?;
+    return widget.enrichedAcitivity.reactionCounts!['like'];
   }
 
   Future<void> _addLikeReaction() async {
-    latestLikeReaction = await context.read<FeedState>().client.reactions.add(
-          'like',
-          widget.enrichedAcitivity.id!,
-          userId: context.read<FeedState>().user.id,
-        );
+    latestLikeReaction = await context.feedState.client.reactions.add(
+      'like',
+      widget.enrichedAcitivity.id!,
+      userId: context.feedState.user.id,
+    );
 
     setState(() {
       likeReactions.add(latestLikeReaction!);
@@ -95,7 +95,7 @@ class __PictureCarousalState extends State<_PictureCarousal> {
 
     try {
       if (reactionId != null) {
-        await context.read<FeedState>().client.reactions.delete(reactionId);
+        await context.feedState.client.reactions.delete(reactionId);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -184,15 +184,15 @@ class __PictureCarousalState extends State<_PictureCarousal> {
             style: AppTextStyle.textStyleLight,
             children: <TextSpan>[
               TextSpan(
-                  text: UserData.fromMap(likeReactions[0].user!['data']
-                          as Map<String, dynamic>)
+                  text: UserData.fromMap(
+                          likeReactions[0].user?.data as Map<String, dynamic>)
                       .fullName,
                   style: AppTextStyle.textStyleBold),
               if (likeCount > 1 && likeCount < 3) ...[
                 const TextSpan(text: ' and '),
                 TextSpan(
-                    text: UserData.fromMap(likeReactions[1].user!['data']
-                            as Map<String, dynamic>)
+                    text: UserData.fromMap(
+                            likeReactions[1].user?.data as Map<String, dynamic>)
                         .fullName,
                     style: AppTextStyle.textStyleBold),
               ],
@@ -235,14 +235,14 @@ class __CommentBlockState extends State<_CommentBlock> {
   }
 
   int? getCommentCount() {
-    return enrichedActivity.reactionCounts!['comment'] as int?;
+    return enrichedActivity.reactionCounts!['comment'];
   }
 
   Future<void> addComment(String message) async {
-    final reaction = await context.read<FeedState>().client.reactions.add(
+    final reaction = await context.feedState.client.reactions.add(
       'comment',
       enrichedActivity.id!,
-      userId: context.read<FeedState>().user.id,
+      userId: context.feedState.user.id,
       data: {
         'message': message,
       },
@@ -281,7 +281,7 @@ class __CommentBlockState extends State<_CommentBlock> {
                 children: <TextSpan>[
                   TextSpan(
                       text: UserData.fromMap(
-                              comments[0].user!['data'] as Map<String, dynamic>)
+                              comments[0].user?.data as Map<String, dynamic>)
                           .fullName,
                       style: AppTextStyle.textStyleBold),
                   const TextSpan(text: '  '),
@@ -298,7 +298,7 @@ class __CommentBlockState extends State<_CommentBlock> {
                 children: <TextSpan>[
                   TextSpan(
                       text: UserData.fromMap(
-                              comments[1].user!['data'] as Map<String, dynamic>)
+                              comments[1].user?.data as Map<String, dynamic>)
                           .fullName,
                       style: AppTextStyle.textStyleBold),
                   const TextSpan(text: '  '),

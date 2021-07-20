@@ -24,6 +24,23 @@ class FeedState extends ChangeNotifier {
   /// Object representing the extraData from [user].
   UserData? userData;
 
+  /// Current user's [feed.FlatFeed] with name 'user'.
+  ///
+  /// This feed contains all of a user's personal posts.
+  feed.FlatFeed get currentUserFeed => _client.flatFeed('user', _user.id);
+
+  /// Current user's [feed.FlatFeed] with name 'timeline'.
+  ///
+  /// This contains all posts that a user has subscribed (followed) to.
+  feed.FlatFeed get currentTimelineFeed => _client.flatFeed('user', _user.id);
+
+  /// Target user's [feed.FlatFeed] with name 'user'.
+  feed.FlatFeed targetUserFeed(String targetUserId) =>
+      _client.flatFeed('user', targetUserId);
+
+  /// `Timeline`FlatFeed.
+  feed.FlatFeed get timelineUserFeed => _client.flatFeed('timeline');
+
   /// Mock authentication to connect a dummy user with predefined tokens.
   Future<void> connect(DemoAppUser user) async {
     _client = feed.StreamFeedClient.connect(

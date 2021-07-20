@@ -14,7 +14,7 @@ class SearchPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final users = List<DemoAppUser>.from(DemoAppUser.values)
-      ..removeWhere((it) => it.id == context.read<FeedState>().user.id);
+      ..removeWhere((it) => it.id == context.feedState.user.id);
     return ListView.builder(
       itemCount: users.length,
       itemBuilder: (context, index) {
@@ -38,13 +38,28 @@ class _UserProfile extends StatefulWidget {
 
 class __UserProfileState extends State<_UserProfile> {
   late feed.User user;
+  late bool isFollowing;
   late Future<UserData> userDataFuture = getUser();
 
   Future<UserData> getUser() async {
-    final userClient = context.read<FeedState>().client.user(widget.userId);
+    final userClient = context.feedState.client.user(widget.userId);
 
     user = await userClient.profile();
+    isFollowing = await _isFollowingUser(user);
     return UserData.fromMap(user.data!);
+  }
+
+  /// Determine if the current authenticated user is following [user].
+  Future<bool> _isFollowingUser(feed.User user) async {
+    final following = await context.feedState.currentUserFeed.following(
+      limit: 1,
+      offset: 0,
+      filter: [
+        feed.FeedId.id('user:${user.id}'),
+      ],
+    );
+
+    return following.isNotEmpty;
   }
 
   @override
@@ -64,6 +79,7 @@ class __UserProfileState extends State<_UserProfile> {
                 return _ProfileTile(
                   user: user,
                   userData: userData,
+                  isFollowing: isFollowing,
                 );
               }
               return const SizedBox.shrink();
@@ -79,10 +95,12 @@ class _ProfileTile extends StatefulWidget {
     Key? key,
     required this.user,
     required this.userData,
+    required this.isFollowing,
   }) : super(key: key);
 
   final feed.User user;
   final UserData userData;
+  final bool isFollowing;
 
   @override
   __ProfileTileState createState() => __ProfileTileState();
@@ -90,57 +108,20 @@ class _ProfileTile extends StatefulWidget {
 
 class __ProfileTileState extends State<_ProfileTile> {
   bool _isLoading = false;
-  bool _isFollowing = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _determineIsFollowing();
-  }
-
-  Future<void> _determineIsFollowing() async {
-    setState(() {
-      _isLoading = true;
-    });
-    final client = context.read<FeedState>().client;
-    final currentUserFeed = client.flatFeed(
-      'timeline',
-      client.currentUser!.userId,
-    );
-
-    final following =
-        await currentUserFeed.following(limit: 1, offset: 0, filter: [
-      feed.FeedId.id('user:${widget.user.id}'),
-    ]);
-
-    if (following.isNotEmpty) {
-      setState(() {
-        _isFollowing = true;
-        _isLoading = false;
-      });
-    } else {
-      setState(() {
-        _isFollowing = false;
-        _isLoading = false;
-      });
-    }
-  }
+  late bool _isFollowing = widget.isFollowing;
 
   Future<void> followOrUnfollowUser(BuildContext context) async {
     setState(() {
       _isLoading = true;
     });
-    final client = context.read<FeedState>().client;
-    final currentUserFeed = client.flatFeed(
-      'timeline',
-      client.currentUser!.userId,
-    );
-    final selectedUserFeed = client.flatFeed('user', widget.user.id!);
+    final currentUserTimelineFeed = context.feedState.currentTimelineFeed;
+    final selectedUserFeed = context.feedState.targetUserFeed(widget.user.id!);
+
     if (_isFollowing) {
-      await currentUserFeed.unfollow(selectedUserFeed);
+      await currentUserTimelineFeed.unfollow(selectedUserFeed);
       _isFollowing = false;
     } else {
-      await currentUserFeed.follow(selectedUserFeed);
+      await currentUserTimelineFeed.follow(selectedUserFeed);
       _isFollowing = true;
     }
     setState(() {

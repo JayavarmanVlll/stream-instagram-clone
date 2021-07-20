@@ -29,7 +29,11 @@ dependencies:
   google_fonts: ^2.1.0
   image_picker: ^0.8.2
   provider: ^5.0.0
-  stream_feed: ^0.2.2
+  stream_feed:
+    git:
+      url: https://github.com/GetStream/stream-feed-flutter
+      ref: core-docs
+      path: packages/stream_feed
   transparent_image: ^2.0.0
 
 dev_dependencies:
