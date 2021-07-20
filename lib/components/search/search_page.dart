@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:stream_feed/stream_feed.dart' as feed;
 import 'package:provider/provider.dart';
 import 'package:stream_instagram_clone/app/app.dart';
-import 'package:stream_instagram_clone/state/state.dart';
 
 /// {@template search_page}
 /// Page to search for content and other users.
@@ -14,7 +13,7 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final users = List<DummyAppUser>.from(DummyAppUser.values)
+    final users = List<DemoAppUser>.from(DemoAppUser.values)
       ..removeWhere((it) => it.id == context.read<FeedState>().user.id);
     return ListView.builder(
       itemCount: users.length,

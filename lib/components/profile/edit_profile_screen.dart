@@ -5,18 +5,18 @@ import 'package:stream_instagram_clone/components/home/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
 /// {@template edit_profile_page}
-/// Page to edit a user's profile info.
+/// Screen to edit a user's profile info.
 /// {@endtemplate}
-class EditProfilePage extends StatelessWidget {
+class EditProfileScreen extends StatelessWidget {
   /// {@macro edit_profile_page}
-  const EditProfilePage({
+  const EditProfileScreen({
     Key? key,
   }) : super(key: key);
 
-  /// Bottom animation route to this screen.
+  /// Custom route to this screen. Animates from the bottom up.
   static Route get route => PageRouteBuilder(
         pageBuilder: (context, animation, secondaryAnimation) =>
-            const EditProfilePage(),
+            const EditProfileScreen(),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           final tween = Tween(begin: const Offset(0.0, 1.0), end: Offset.zero)
               .chain(CurveTween(curve: Curves.easeOutQuint));

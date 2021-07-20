@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:stream_feed/stream_feed.dart' as feed;
 import 'package:provider/provider.dart';
+import 'package:stream_feed/stream_feed.dart' as feed;
 
 import '../../app/app.dart';
-import '../widgets/widgets.dart';
+import '../global_widgets/widgets.dart';
 
 /// {@template new_post_screen}
 /// Screen to choose photos and add a new feed post.

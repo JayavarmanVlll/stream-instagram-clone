@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:stream_feed/stream_feed.dart' as feed;
 
-import '../app/dummy_app_user.dart';
+import 'demo_users.dart';
 import 'models/models.dart';
 
 /// {@template feed_state}
-/// State related to Stream Feed.
+/// State related to Stream Feed. Manages the connection and stores
+/// a references to the Stream Feed Client and User.
 /// {@endtemplate}
 class FeedState extends ChangeNotifier {
   /// {@macro feed_state}
@@ -24,7 +25,7 @@ class FeedState extends ChangeNotifier {
   UserData? userData;
 
   /// Mock authentication to connect a dummy user with predefined tokens.
-  Future<void> connect(DummyAppUser user) async {
+  Future<void> connect(DemoAppUser user) async {
     _client = feed.StreamFeedClient.connect(
       'crjk2cdcf2tc',
       token: user.token,

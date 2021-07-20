@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
               const SizedBox(height: 42),
-              for (final user in DummyAppUser.values)
+              for (final user in DemoAppUser.values)
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: ElevatedButton(

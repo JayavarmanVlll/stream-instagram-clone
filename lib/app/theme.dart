@@ -32,8 +32,8 @@ abstract class AppTextStyle {
   static const textStyleLight = TextStyle(fontWeight: FontWeight.w300);
 }
 
-/// Global reference to the application theme used.
-class AppTheme {
+/// Global reference to the application theme.
+abstract class AppTheme {
   /// Dark theme and its settings.
   static ThemeData darkTheme = ThemeData.dark().copyWith(
     visualDensity: VisualDensity.adaptivePlatformDensity,

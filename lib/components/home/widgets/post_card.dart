@@ -5,8 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:stream_feed/stream_feed.dart' as feed;
 
 import '../../../app/app.dart';
-import '../../../state/state.dart';
-import '../../widgets/widgets.dart';
+import '../../global_widgets/widgets.dart';
 
 /// {@template post_card}
 /// A card that displays a user post.

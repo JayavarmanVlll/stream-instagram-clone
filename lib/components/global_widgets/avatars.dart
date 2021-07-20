@@ -1,9 +1,15 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:stream_instagram_clone/app/app.dart';
-import 'package:stream_instagram_clone/state/state.dart';
+
+import '../../app/app.dart';
 
 /// An avatar that display a user's profile picture.
+///
+/// Supports different sizes:
+/// - `Avatar.tiny`
+/// - `Avatar.small`
+/// - `Avatar.medium`
+/// - `Avatar.big`
 class Avatar extends StatelessWidget {
   /// Creates a tiny avatar.
   const Avatar.tiny({

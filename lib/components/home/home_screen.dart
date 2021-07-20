@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+
 import '../../app/app.dart';
+import '../global_widgets/widgets.dart';
 import '../new_post/new_post.dart';
-import '../widgets/widgets.dart';
-import 'pages/pages.dart';
+import '../profile/profile.dart';
+import '../search/search.dart';
+import '../timeline/timeline.dart';
 
 /// {@template home_screen}
 /// HomeScreen of the application.
@@ -15,6 +18,7 @@ class HomeScreen extends StatefulWidget {
   /// {@macro home_screen}
   const HomeScreen({Key? key}) : super(key: key);
 
+  /// List of pages available from the home screen.
   static const List<Widget> _homePages = <Widget>[
     TimelinePage(),
     SearchPage(),
@@ -71,11 +75,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Center(
         child: HomeScreen._homePages.elementAt(_selectedIndex),
       ),
-      // body: ListView.builder(
-      //   itemBuilder: (context, index) {
-      //     return const PostCard();
-      //   },
-      // ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           color: Colors.white,

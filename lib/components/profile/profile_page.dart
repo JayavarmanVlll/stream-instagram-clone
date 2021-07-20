@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:stream_feed/stream_feed.dart' as feed;
 
-import '../../../app/app.dart';
-import '../../../state/state.dart';
-import '../../new_post/new_post.dart';
-import '../widgets/widgets.dart';
-import 'edit_profile_page.dart';
+import '../../app/app.dart';
+import '../home/widgets/widgets.dart';
+import '../new_post/new_post.dart';
+import 'edit_profile_screen.dart';
 
 /// {@template profile_page}
 /// User profile page. List of user created posts.
@@ -62,7 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       autofocus: false,
                       clipBehavior: Clip.none,
                       onPressed: () {
-                        Navigator.of(context).push(EditProfilePage.route);
+                        Navigator.of(context).push(EditProfileScreen.route);
                       },
                       child: const Text('Edit Profile'),
                     ),
