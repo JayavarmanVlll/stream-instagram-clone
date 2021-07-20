@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../app/app.dart';
-import '../global_widgets/widgets.dart';
+import '../app_widgets/widgets.dart';
 import '../new_post/new_post.dart';
 import '../profile/profile.dart';
 import '../search/search.dart';

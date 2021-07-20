@@ -7,7 +7,7 @@ import 'package:stream_feed/stream_feed.dart' as feed;
 import 'package:transparent_image/transparent_image.dart';
 
 import '../../app/app.dart';
-import '../global_widgets/widgets.dart';
+import '../app_widgets/widgets.dart';
 
 /// {@template new_post_screen}
 /// Screen to choose photos and add a new feed post.

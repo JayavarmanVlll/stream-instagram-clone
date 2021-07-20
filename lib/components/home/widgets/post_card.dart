@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:stream_feed/stream_feed.dart' as feed;
 
 import '../../../app/app.dart';
-import '../../global_widgets/widgets.dart';
+import '../../app_widgets/widgets.dart';
 
 /// {@template post_card}
 /// A card that displays a user post.
@@ -181,6 +181,7 @@ class __PictureCarousalState extends State<_PictureCarousal> {
         child: RichText(
           text: TextSpan(
             text: 'Liked by ',
+            style: AppTextStyle.textStyleLight,
             children: <TextSpan>[
               TextSpan(
                   text: UserData.fromMap(likeReactions[0].user!['data']
@@ -331,14 +332,18 @@ class __CommentBlockState extends State<_CommentBlock> {
           padding: const EdgeInsets.only(left: 16.0, top: 8, right: 8),
           child: Row(
             children: [
-              // Avatar.tiny(), // TODO add again
+              Avatar.tiny(
+                userData: context.watch<FeedState>().userData!,
+              ),
               Expanded(
                 child: Padding(
                   padding: textPadding,
                   child: SizedBox(
                     child: TextField(
-                      decoration:
-                          const InputDecoration(hintText: 'Add a comment...'),
+                      decoration: const InputDecoration(
+                        hintText: 'Add a comment...',
+                        border: InputBorder.none,
+                      ),
                       style: const TextStyle(
                         color: AppColors.fadedTextColor,
                       ),
