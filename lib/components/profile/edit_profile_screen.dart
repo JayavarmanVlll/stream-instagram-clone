@@ -126,7 +126,7 @@ class __ChangeProfilePictureButtonState
   final picker = ImagePicker();
 
   Future<void> _changePicture() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       await context.read<FeedState>().updateProfilePhoto(pickedFile.path);
     } else {

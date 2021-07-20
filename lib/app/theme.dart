@@ -9,13 +9,19 @@ abstract class AppColors {
   static const primaryTextColor = Colors.white;
 
   /// Accent Color.
-  static const accentColor = Colors.red;
+  static const accentColor = Colors.blue;
 
   /// Color to use for favorite icons (indicating a like).
   static const likeColor = Colors.red;
 
   /// Color of secondary/faded text.
   static const fadedTextColor = Colors.grey;
+
+  /// Top gradient color used in various UI components.
+  static const topGradient = Color(0xFFE60064);
+
+  /// Bottom gradient color used in various UI components.
+  static const bottomGradient = Color(0xFFFFB344);
 }
 
 /// Global reference to application [TextStyle]s.
@@ -30,6 +36,12 @@ abstract class AppTextStyle {
 
   /// Light text style.
   static const textStyleLight = TextStyle(fontWeight: FontWeight.w300);
+
+  /// Action text
+  static const textStyleAction = TextStyle(
+    fontWeight: FontWeight.w700,
+    color: AppColors.accentColor,
+  );
 }
 
 /// Global reference to the application theme.

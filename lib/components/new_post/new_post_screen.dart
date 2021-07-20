@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:stream_feed/stream_feed.dart' as feed;
+import 'package:transparent_image/transparent_image.dart';
 
 import '../../app/app.dart';
 import '../global_widgets/widgets.dart';
@@ -27,13 +28,13 @@ class _NewPostScreenState extends State<NewPostScreen> {
   final _formKey = GlobalKey<FormState>();
   final _text = TextEditingController();
 
-  PickedFile? _pickedFile;
+  XFile? _pickedFile;
   bool loading = false;
 
   final picker = ImagePicker();
 
   Future<void> _pickFile() async {
-    _pickedFile = await picker.getImage(source: ImageSource.gallery);
+    _pickedFile = await picker.pickImage(source: ImageSource.gallery);
     setState(() {});
   }
 
@@ -96,6 +97,17 @@ class _NewPostScreenState extends State<NewPostScreen> {
           onTap: () => Navigator.pop(context),
           icon: Icons.close,
         ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: GestureDetector(
+                onTap: _postImage,
+                child: const Text('Share', style: AppTextStyle.textStyleAction),
+              ),
+            ),
+          )
+        ],
         backgroundColor: AppColors.backgroundColor,
       ),
       body: loading
@@ -113,15 +125,46 @@ class _NewPostScreenState extends State<NewPostScreen> {
               children: [
                 InkWell(
                   onTap: _pickFile,
-                  child: Container(
-                    color: Colors.white.withOpacity(0.2),
-                    height: 300,
+                  child: SizedBox(
+                    height: 400,
                     child: (_pickedFile != null)
-                        ? FittedBox(
-                            fit: BoxFit.fill,
-                            child: Image.file(File(_pickedFile!.path)),
+                        ? FadeInImage(
+                            fit: BoxFit.contain,
+                            placeholder: MemoryImage(kTransparentImage),
+                            image: Image.file(File(_pickedFile!.path)).image,
                           )
-                        : const Center(child: Text('Tap to select an image')),
+                        : Container(
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                  begin: Alignment.bottomLeft,
+                                  end: Alignment.topRight,
+                                  colors: [
+                                    AppColors.bottomGradient,
+                                    AppColors.topGradient
+                                  ]),
+                            ),
+                            height: 300,
+                            child: const Center(
+                              child: Text(
+                                'Tap to select an image',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  shadows: <Shadow>[
+                                    Shadow(
+                                      offset: Offset(2.0, 1.0),
+                                      blurRadius: 3.0,
+                                      color: Colors.black54,
+                                    ),
+                                    Shadow(
+                                      offset: Offset(1.0, 1.5),
+                                      blurRadius: 5.0,
+                                      color: Colors.black54,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(
@@ -135,6 +178,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
                       controller: _text,
                       decoration: const InputDecoration(
                         hintText: 'Write a caption',
+                        border: InputBorder.none,
                       ),
                       validator: (text) {
                         if (text == null || text.isEmpty) {
@@ -145,16 +189,6 @@ class _NewPostScreenState extends State<NewPostScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 22,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                    onPressed: _postImage,
-                    child: const Text('Post'),
-                  ),
-                )
               ],
             ),
     );
