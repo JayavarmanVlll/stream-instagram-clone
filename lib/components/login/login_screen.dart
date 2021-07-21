@@ -52,17 +52,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     onPressed: () async {
-                      context.removeAndShowSnackbar('Loading User');
+                      context.removeAndShowSnackbar('Connecting user');
 
-                      await context.feedState.connect(user);
+                      final success = await context.feedState.connect(user);
 
-                      context.removeAndShowSnackbar('User Loaded');
+                      if (success) {
+                        context.removeAndShowSnackbar('User connected');
 
-                      await Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (_) => const HomeScreen(),
-                        ),
-                      );
+                        await Navigator.of(context).pushReplacement(
+                          MaterialPageRoute(
+                            builder: (_) => const HomeScreen(),
+                          ),
+                        );
+                      } else {
+                        context.removeAndShowSnackbar('Could not connect user');
+                      }
                     },
                     child: Padding(
                       padding: const EdgeInsets.symmetric(

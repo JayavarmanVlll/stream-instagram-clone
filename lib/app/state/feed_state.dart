@@ -21,8 +21,10 @@ class FeedState extends ChangeNotifier {
   /// Stream Feed user.
   feed.User get user => _user;
 
-  /// Object representing the extraData from [user].
-  UserData? userData;
+  UserData? _userData;
+
+  /// The extraData from [user], mapped to an [UserData] object.
+  UserData? get userData => _userData;
 
   /// Current user's [feed.FlatFeed] with name 'user'.
   ///
@@ -41,36 +43,37 @@ class FeedState extends ChangeNotifier {
   /// `Timeline`FlatFeed.
   feed.FlatFeed get timelineUserFeed => _client.flatFeed('timeline');
 
-  /// Mock authentication to connect a dummy user with predefined tokens.
-  Future<void> connect(DemoAppUser user) async {
+  /// Connect to Stream Feed with one of the demo users, using a predefined,
+  /// hardcoded token.
+  ///
+  /// THIS IS ONLY FOR DEMONSTRATIONS PURPOSES. TOKENS SHOULD NOT BE
+  /// HARDCODED LIKE THIS.
+  Future<bool> connect(DemoAppUser user) async {
     _client = feed.StreamFeedClient.connect(
       'crjk2cdcf2tc',
       token: user.token,
     );
 
-    final currentUser =
-        await _client.currentUser?.get(); // TODO explore getOrCreate
+    final currentUser = await _client.currentUser?.getOrCreate(user.data!);
     if (currentUser != null && currentUser.data != null) {
       _user = currentUser;
-      userData = UserData.fromMap(currentUser.data!);
+      _userData = UserData.fromMap(_user.data!);
+      notifyListeners();
+      return true;
     } else {
-      // No user data has been set on Stream. Set data.
-      _user = await _client.setUser(user.data!);
-      userData = UserData.fromMap(user.data!);
+      return false;
     }
-
-    notifyListeners();
   }
 
   /// Uploads a new profile picture from the given [filePath].
   ///
-  /// This will call [notifyListeners] and update the local [userData] state.
+  /// This will call [notifyListeners] and update the local [_userData] state.
   Future<void> updateProfilePhoto(String filePath) async {
     final imageUrl =
         await client.images.upload(feed.AttachmentFile(path: filePath));
-    userData = userData?.copyWith(profilePhoto: imageUrl);
-    if (userData != null) {
-      await client.currentUser!.update(userData!.toMap());
+    _userData = _userData?.copyWith(profilePhoto: imageUrl);
+    if (_userData != null) {
+      await client.currentUser!.update(_userData!.toMap());
     }
 
     notifyListeners();
