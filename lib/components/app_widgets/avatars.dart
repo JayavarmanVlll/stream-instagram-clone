@@ -83,7 +83,7 @@ class Avatar extends StatelessWidget {
   static const _tinyColoredCircle = _tinyPaddedCircle * 2 + 4;
 
   // Small avatar configuration
-  static const _smallAvatarSize = 50.0;
+  static const _smallAvatarSize = 40.0;
   static const _smallPaddedCircle = _smallAvatarSize + 2;
   static const _smallColoredCircle = _smallPaddedCircle * 2 + 4;
 
@@ -150,7 +150,7 @@ class _CircularProfilePicture extends StatelessWidget {
             width: size,
             height: size,
             decoration: const BoxDecoration(
-              color: AppColors.accentColor,
+              color: AppColors.accent,
               shape: BoxShape.circle,
             ),
             child: Center(

@@ -106,7 +106,7 @@ class _NewPostScreenState extends State<NewPostScreen> {
             ),
           )
         ],
-        backgroundColor: AppColors.backgroundColor,
+        backgroundColor: AppColors.background,
       ),
       body: loading
           ? Center(

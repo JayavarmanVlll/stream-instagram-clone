@@ -10,6 +10,7 @@ class TapFadeIcon extends StatefulWidget {
     required this.onTap,
     required this.icon,
     this.iconColor = Colors.white,
+    this.size = 22,
   }) : super(key: key);
 
   /// Callback to handle tap.
@@ -20,6 +21,9 @@ class TapFadeIcon extends StatefulWidget {
 
   /// Type of icon.
   final IconData icon;
+
+  /// Icon size.
+  final double size;
 
   @override
   _TapFadeIconState createState() => _TapFadeIconState();
@@ -47,7 +51,11 @@ class _TapFadeIconState extends State<TapFadeIcon> {
     return GestureDetector(
       onTapDown: handleTapDown,
       onTapUp: handleTapUp,
-      child: Icon(widget.icon, color: color),
+      child: Icon(
+        widget.icon,
+        color: color,
+        size: widget.size,
+      ),
     );
   }
 }

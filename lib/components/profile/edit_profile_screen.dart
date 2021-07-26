@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:stream_instagram_clone/app/app.dart';
-import 'package:stream_instagram_clone/components/home/widgets/widgets.dart';
 import 'package:provider/provider.dart';
+
+import '../../app/app.dart';
+import '../home/widgets/widgets.dart';
 
 /// {@template edit_profile_page}
 /// Screen to edit a user's profile info.
@@ -20,9 +21,9 @@ class EditProfileScreen extends StatelessWidget {
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           final tween = Tween(begin: const Offset(0.0, 1.0), end: Offset.zero)
               .chain(CurveTween(curve: Curves.easeOutQuint));
-          final ofsetAnimation = animation.drive(tween);
+          final offsetAnimation = animation.drive(tween);
           return SlideTransition(
-            position: ofsetAnimation,
+            position: offsetAnimation,
             child: child,
           );
         },
@@ -36,14 +37,14 @@ class EditProfileScreen extends StatelessWidget {
     }
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.backgroundColor,
+        backgroundColor: AppColors.background,
         leading: TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
           child: const Text(
             'Cancel',
-            style: TextStyle(color: AppColors.primaryTextColor),
+            style: TextStyle(color: AppColors.primaryText),
           ),
         ),
         leadingWidth: 80,

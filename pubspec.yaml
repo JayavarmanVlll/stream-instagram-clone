@@ -28,18 +28,23 @@ dependencies:
   equatable: ^2.0.3
   google_fonts: ^2.1.0
   image_picker: ^0.8.2
+  jiffy: ^4.1.0
   provider: ^5.0.0
-  stream_feed:
-    git:
-      url: https://github.com/GetStream/stream-feed-flutter
-      ref: core-docs
-      path: packages/stream_feed
+  stream_feed: ^0.2.2
   transparent_image: ^2.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   very_good_analysis: ^2.1.2
+
+# TODO: Remove overrides when published.
+dependency_overrides:
+  stream_feed:
+    git:
+      url: https://github.com/GetStream/stream-feed-flutter
+      ref: core-docs
+      path: packages/stream_feed
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

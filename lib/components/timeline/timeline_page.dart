@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:stream_feed/stream_feed.dart' as feed;
-import 'package:stream_instagram_clone/app/app.dart';
-import 'package:stream_instagram_clone/components/home/widgets/widgets.dart';
-import 'package:provider/provider.dart';
+
+import '../../app/app.dart';
+import '../home/widgets/widgets.dart';
 
 /// {@template timeline_page}
 /// Page to display a timeline of user created posts. Global 'timeline' feed.
@@ -23,7 +23,8 @@ class _TimelinePageState extends State<TimelinePage> {
       flags: feed.EnrichmentFlags()
           .withOwnReactions()
           .withRecentReactions()
-          .withReactionCounts(),
+          .withReactionCounts() // TODO: necesssary?
+          .withOwnChildren(), // TODO: necesssary?
     );
   }
 
@@ -48,10 +49,9 @@ class _TimelinePageState extends State<TimelinePage> {
               return ListView.builder(
                 itemCount: activities.length,
                 itemBuilder: (context, index) {
-                  // return Text('${activities[index].id}');
                   return PostCard(
                     enrichedAcitivity: activities[index],
-                  ); // TODO: add back
+                  );
                 },
               );
             }

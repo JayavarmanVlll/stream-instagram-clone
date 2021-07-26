@@ -54,7 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   SliverToBoxAdapter(
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
-                        primary: AppColors.primaryTextColor,
+                        primary: AppColors.primaryText,
                       ),
                       autofocus: false,
                       clipBehavior: Clip.none,

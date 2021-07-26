@@ -44,7 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title:
             Text('Stream-agram', style: GoogleFonts.grandHotel(fontSize: 32)),
-        backgroundColor: AppColors.backgroundColor,
+        backgroundColor: AppColors.background,
         centerTitle: false,
         actions: [
           Padding(

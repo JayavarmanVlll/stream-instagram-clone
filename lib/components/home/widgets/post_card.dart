@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 import 'package:stream_feed/stream_feed.dart' as feed;
 
 import '../../../app/app.dart';
 import '../../app_widgets/widgets.dart';
+import '../../comments/comments.dart';
 
 /// {@template post_card}
 /// A card that displays a user post.
@@ -24,14 +26,16 @@ class PostCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final actorData =
         enrichedAcitivity.actor!.data as Map<String, dynamic>; // TODO: refine.
+    final userData =
+        UserData.fromMap(actorData['data'] as Map<String, dynamic>);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _ProfileSlab(
-          userData: UserData.fromMap(actorData['data'] as Map<String, dynamic>),
+          userData: userData,
         ),
         _PictureCarousal(
-          enrichedAcitivity: enrichedAcitivity,
+          enrichedActivity: enrichedAcitivity,
         ),
         _CommentBlock(
           enrichedActivity: enrichedAcitivity,
@@ -44,10 +48,10 @@ class PostCard extends StatelessWidget {
 class _PictureCarousal extends StatefulWidget {
   const _PictureCarousal({
     Key? key,
-    required this.enrichedAcitivity,
+    required this.enrichedActivity,
   }) : super(key: key);
 
-  final feed.EnrichedActivity enrichedAcitivity;
+  final feed.EnrichedActivity enrichedActivity;
 
   @override
   __PictureCarousalState createState() => __PictureCarousalState();
@@ -60,17 +64,17 @@ class __PictureCarousalState extends State<_PictureCarousal> {
   feed.Reaction? latestLikeReaction;
 
   List<feed.Reaction>? getLikeReactions() {
-    return widget.enrichedAcitivity.latestReactions!['like'];
+    return widget.enrichedActivity.latestReactions!['like'];
   }
 
   int? getLikeCount() {
-    return widget.enrichedAcitivity.reactionCounts!['like'];
+    return widget.enrichedActivity.reactionCounts!['like'];
   }
 
   Future<void> _addLikeReaction() async {
     latestLikeReaction = await context.feedState.client.reactions.add(
       'like',
-      widget.enrichedAcitivity.id!,
+      widget.enrichedActivity.id!,
       userId: context.feedState.user.id,
     );
 
@@ -87,7 +91,7 @@ class __PictureCarousalState extends State<_PictureCarousal> {
       reactionId = latestLikeReaction?.id;
     } else {
       // An old reaction has been retrieved from Stream.
-      final prevReaction = widget.enrichedAcitivity.ownReactions?['like'];
+      final prevReaction = widget.enrichedActivity.ownReactions?['like'];
       if (prevReaction != null && prevReaction.isNotEmpty) {
         reactionId = prevReaction[0].id;
       }
@@ -130,7 +134,7 @@ class __PictureCarousalState extends State<_PictureCarousal> {
             return const SizedBox(height: 300);
           },
           imageUrl: Helpers.resizedUrl(
-              url: widget.enrichedAcitivity.extraData!['image_url'] as String,
+              url: widget.enrichedActivity.extraData!['image_url'] as String,
               resize: const feed.Resize(imageSize, imageSize)),
         ),
       ),
@@ -141,17 +145,30 @@ class __PictureCarousalState extends State<_PictureCarousal> {
           ),
           Padding(
             padding: iconPadding,
-            child: _FavoriteButton(
-              enrichedAcitivity: widget.enrichedAcitivity,
-              handleOnLike: _addLikeReaction,
-              handleRemoveLike: _removeLikeReaction,
+            child: FavoriteIconButton(
+              isLiked: widget.enrichedActivity.ownReactions?['like'] != null,
+              onTap: (liked) {
+                if (liked) {
+                  _addLikeReaction();
+                } else {
+                  _removeLikeReaction();
+                }
+              },
             ),
           ),
           Padding(
             padding: iconPadding,
             child: TapFadeIcon(
-                onTap: () => context
-                    .removeAndShowSnackbar('Comment: Not yet implemented'),
+                onTap: () {
+                  final map = (widget.enrichedActivity.actor!.data
+                      as Map<String, dynamic>)['data'] as Map<String, dynamic>;
+                  Navigator.of(context).push(
+                    CommentsScreen.route(
+                      activityId: widget.enrichedActivity.id!,
+                      activityOwnerData: UserData.fromMap(map),
+                    ),
+                  );
+                },
                 icon: Icons.chat_bubble_outline),
           ),
           Padding(
@@ -224,7 +241,8 @@ class _CommentBlock extends StatefulWidget {
 class __CommentBlockState extends State<_CommentBlock> {
   feed.EnrichedActivity get enrichedActivity => widget.enrichedActivity;
 
-  late final String _daysSinceMessage = _calculateDaysSinceMessage();
+  late final String _timeSinceMessage =
+      Jiffy(widget.enrichedActivity.time).fromNow();
 
   late List<feed.Reaction> comments = getCommentReactions() ?? [];
 
@@ -252,19 +270,6 @@ class __CommentBlockState extends State<_CommentBlock> {
       comments.add(reaction);
       commentsCount++;
     });
-  }
-
-  String _calculateDaysSinceMessage() {
-    final datePublished = enrichedActivity.time!;
-    final dateNow = DateTime.now();
-    final daysSincePublish = dateNow.difference(datePublished).inDays;
-    if (daysSincePublish == 0) {
-      return 'Today';
-    } else if (daysSincePublish == 1) {
-      return '1 day ago';
-    } else {
-      return '$daysSincePublish days ago';
-    }
   }
 
   @override
@@ -312,8 +317,12 @@ class __CommentBlockState extends State<_CommentBlock> {
             padding: const EdgeInsets.only(left: 16.0, top: 8),
             child: GestureDetector(
               onTap: () {
-                context.removeAndShowSnackbar(
-                    'View all comments not yet implemented');
+                final map = (widget.enrichedActivity.actor!.data
+                    as Map<String, dynamic>)['data'] as Map<String, dynamic>;
+                Navigator.of(context).push(CommentsScreen.route(
+                  activityId: widget.enrichedActivity.id!,
+                  activityOwnerData: UserData.fromMap(map),
+                ));
               },
               child: Text(
                 'View all $commentsCount comments',
@@ -324,7 +333,7 @@ class __CommentBlockState extends State<_CommentBlock> {
         Padding(
           padding: const EdgeInsets.only(left: 16.0, top: 8),
           child: Text(
-            _daysSinceMessage,
+            _timeSinceMessage,
             style: AppTextStyle.textStyleFaded,
           ),
         ),
@@ -338,26 +347,24 @@ class __CommentBlockState extends State<_CommentBlock> {
               Expanded(
                 child: Padding(
                   padding: textPadding,
-                  child: SizedBox(
-                    child: TextField(
-                      decoration: const InputDecoration(
-                        hintText: 'Add a comment...',
-                        border: InputBorder.none,
-                      ),
-                      style: const TextStyle(
-                        color: AppColors.fadedTextColor,
-                      ),
-                      textInputAction: TextInputAction.go,
-                      onSubmitted: (value) {
-                        if (value.isNotEmpty) {
-                          addComment(value);
-                        }
-                      },
+                  child: TextField(
+                    decoration: const InputDecoration(
+                      hintText: 'Add a comment...',
+                      border: InputBorder.none,
                     ),
+                    style: const TextStyle(
+                      color: AppColors.fadedText,
+                      fontSize: 14,
+                    ),
+                    textInputAction: TextInputAction.go,
+                    onSubmitted: (value) {
+                      if (value.isNotEmpty && value != '') {
+                        addComment(value);
+                      }
+                    },
                   ),
                 ),
               ),
-              const Spacer(),
               const Padding(
                 padding: textPadding,
                 child: Text('❤️'),
@@ -370,47 +377,6 @@ class __CommentBlockState extends State<_CommentBlock> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _FavoriteButton extends StatefulWidget {
-  const _FavoriteButton({
-    Key? key,
-    required this.enrichedAcitivity,
-    required this.handleOnLike,
-    required this.handleRemoveLike,
-  }) : super(key: key);
-
-  final feed.EnrichedActivity enrichedAcitivity;
-  final VoidCallback handleOnLike;
-  final VoidCallback handleRemoveLike;
-
-  @override
-  __FavoriteButtonState createState() => __FavoriteButtonState();
-}
-
-class __FavoriteButtonState extends State<_FavoriteButton> {
-  late bool isLiked = widget.enrichedAcitivity.ownReactions?['like'] != null;
-
-  Future<void> like() async {
-    setState(() {
-      isLiked = !isLiked;
-    });
-    if (isLiked) {
-      widget.handleOnLike();
-    } else {
-      widget.handleRemoveLike();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: like,
-      child: isLiked
-          ? const Icon(Icons.favorite, color: AppColors.likeColor)
-          : const Icon(Icons.favorite_border),
     );
   }
 }
